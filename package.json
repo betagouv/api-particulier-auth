@@ -41,7 +41,7 @@
   "dependencies": {
     "blocked": "^1.2.1",
     "body-parser": "^1.17.2",
-    "bunyan": "^1.8.12",
+    "bunyan": "^2.0.2",
     "bunyan-blackhole": "^1.1.1",
     "bunyan-format": "^0.2.1",
     "cors": "^2.8.4",
