@@ -1,0 +1,11 @@
+{
+  "data": [
+    {
+      "name": "scope 1",
+      "description": "description scope 1"
+    }, {
+      "name": "scope 2",
+      "description": "description scope 2"
+    }
+  ]
+}
