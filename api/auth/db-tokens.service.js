@@ -1,23 +1,19 @@
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
 const crypto = require('crypto')
+const Token = require('./token.model')
 
 class DbTokenService {
   constructor (options) {
     this.options = options
-    this.mongoConnect = MongoClient.connect(this.options.mongoDbUrl, {})
+    this.collection = Token
   }
 
   initialize () {
-    return this.mongoConnect.then((db) => {
-      this.collection = db.collection('tokens')
-      return this
-    })
+    return Promise.resolve(this)
   }
 
   getToken (token) {
     const encryptedToken = crypto.createHash('sha512').update(token).digest('hex')
-    return this.collection.findOne({hashed_token: encryptedToken})
+    return Token.findOne({hashed_token: encryptedToken})
   }
 }
 

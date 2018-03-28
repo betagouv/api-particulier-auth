@@ -2,6 +2,7 @@
 
 const http = require('http')
 const express = require('express')
+const mongoose = require('mongoose')
 const StandardError = require('standard-error')
 const emptylogger = require('bunyan-blackhole')
 const expressBunyanLogger = require('express-bunyan-logger')
@@ -64,9 +65,15 @@ module.exports = class Server {
 
     app.use(formatError)
 
+    mongoose.connect(options.mongoDbUrl)
+    mongoose.Promise = global.Promise
+    const db = mongoose.connection
+    db.on('error', (error) => logger.error({error: error}, 'MongoDB connection error:'))
+
     this.server = http.createServer(app)
     this.app = app
     this.logger = logger
+    this.db = db
   }
 
   start (onStarted) {
