@@ -2,7 +2,7 @@ const expect = require('chai').expect
 const Service = require('../scope.service')
 const testData = require('./mongo.json')
 
-describe('Db Token service', () => {
+describe('Scope service', () => {
   const url = 'mongodb://localhost:27017/test-api-particulier'
   const service = new Service({mongoDbUrl: url})
   beforeEach(() => {
