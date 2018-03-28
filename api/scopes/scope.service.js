@@ -1,17 +1,13 @@
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
+const Scope = require('./scope.model')
 
 class ScopeService {
   constructor (options) {
     this.options = options
-    this.mongoConnect = MongoClient.connect(this.options.mongoDbUrl, {})
+    this.collection = Scope
   }
 
   initialize () {
-    return this.mongoConnect.then((db) => {
-      this.collection = db.collection('scopes')
-      return this
-    })
+    return Promise.resolve(this)
   }
 
   all () {
