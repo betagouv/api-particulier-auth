@@ -6,7 +6,7 @@ module.exports = function (options) {
   const router = express.Router()
   const controller = new Controller(options)
 
-  router.get('/', (req, res, next) => controller.index(req, res, next), format)
+  router.get('/', controller.index, format)
 
   return router
 }
