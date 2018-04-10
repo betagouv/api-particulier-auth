@@ -2,7 +2,6 @@
 
 const http = require('http')
 const express = require('express')
-const mongoose = require('mongoose')
 const StandardError = require('standard-error')
 const emptylogger = require('bunyan-blackhole')
 const expressBunyanLogger = require('express-bunyan-logger')
@@ -12,9 +11,17 @@ const raven = require('raven')
 const routes = require('./routes')
 const formatError = require('./lib/middlewares/formatError')
 const formatFromUrl = require('./lib/middlewares/formatFromUrl')
+const mongo = require('./lib/utils/mongo')
 
 module.exports = class Server {
   constructor (options) {
+    this.options = options
+  }
+
+  async start () {
+    await mongo.connect()
+
+    const options = this.options
     setDefaults(options)
 
     const logger = options.logger
@@ -25,6 +32,7 @@ module.exports = class Server {
     app.disable('x-powered-by')
     app.use(express.static('public'))
     app.use(bodyParser.json())
+
     const corsOptions = {
       exposedHeaders: ['Range', 'Content-Range', 'X-Content-Range'],
       credentials: true,
@@ -65,34 +73,24 @@ module.exports = class Server {
 
     app.use(formatError)
 
-    mongoose.connect(options.mongoDbUrl)
-    mongoose.Promise = global.Promise
-    const db = mongoose.connection
-    db.on('error', (error) => logger.error({error: error}, 'MongoDB connection error:'))
-
     this.server = http.createServer(app)
     this.app = app
     this.logger = logger
-    this.db = db
-  }
 
-  start (onStarted) {
-    const app = this.app
-    const server = this.server
-    const logger = this.logger
-
-    server.listen(app.get('port'), (error) => {
-      if (error) {
-        logger.error({error: error}, 'Got error while starting server')
-        return onStarted(error)
-      }
-      this.port = server.address().port
-      app.set('port', this.port)
-      logger.info({
-        event: 'server_started',
-        port: this.port
-      }, 'Server listening on port', this.port)
-      onStarted()
+    return new Promise((resolve, reject) => {
+      this.server.listen(app.get('port'), (error) => {
+        if (error) {
+          logger.error({error}, 'Got error while starting server')
+          return reject(error)
+        }
+        this.port = this.server.address().port
+        app.set('port', this.port)
+        logger.info({
+          event: 'server_started',
+          port: this.port
+        }, 'Server listening on port', this.port)
+        resolve()
+      })
     })
   }
 

@@ -1,11 +1,9 @@
-const Scope = require('./scope.model')
-const mongoose = require('mongoose')
+const mongo = require('../lib/utils/mongo')
 
 class ScopeService {
   constructor (options) {
-    mongoose.Promise = Promise
     this.options = options
-    this.collection = Scope
+    this.collection = mongo.db.collection('scopes')
   }
 
   initialize () {
@@ -13,9 +11,9 @@ class ScopeService {
   }
 
   all () {
-    return this.collection.find({}).lean().then((response) => {
-      return response.map((response) => {
-        return { name: response.name, description: response.description }
+    return this.collection.find({}).toArray().then((response) => {
+      return response.map((element) => {
+        return { name: element.name, description: element.description }
       })
     })
   }

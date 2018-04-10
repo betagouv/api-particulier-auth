@@ -8,14 +8,16 @@
     "url": "https://github.com/sgmap/api-particulier"
   },
   "scripts": {
-    "test": "istanbul cover --print details _mocha -- -R spec auth/test/** api/test/** api/*/test/** --recursive && npm run test-style",
+    "test": "mocha api/test/** api/*/test/** && npm run test-style",
     "test-style": "eslint --ignore-path .gitignore api/ auth/ bin/*",
-    "start": "node --prof ./bin/www"
+    "start": "node --prof ./bin/www",
+    "coverage": "nyc --reporter=text mocha api/test/** api/*/test/** && npm run test-style"
   },
   "pre-commit": "test-style",
   "pre-push": "test",
   "author": "SGMAP",
   "devDependencies": {
+    "babel-plugin-istanbul": "^4.1.6",
     "chai": "^3.5.0",
     "coveralls": "^2.13.0",
     "eslint": "^3.19.0",
@@ -26,11 +28,11 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "istanbul": "^0.4.5",
     "mocha": "^3.3.0",
     "mongo-mock": "^2.4.0",
     "nock": "^9.0.13",
     "node-mocks-http": "^1.4.4",
+    "nyc": "^11.6.0",
     "pre-commit": "^1.2.2",
     "pre-push": "^0.1.1",
     "proxyquire": "^1.4.0",
@@ -48,8 +50,7 @@
     "express": "^4.15.4",
     "express-bunyan-logger": "^1.3.2",
     "js2xmlparser": "^1.0.0",
-    "mongodb": "^2.2.31",
-    "mongoose": "^5.0.12",
+    "mongodb": "^2.2.35",
     "nconf": "^0.8.4",
     "raven": "^2.1.1",
     "standard-error": "^1.1.0",
