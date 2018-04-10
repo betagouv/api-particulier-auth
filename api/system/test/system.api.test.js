@@ -12,24 +12,6 @@ describe('System API', () => {
         .expect('content-type', /json/)
         .expect(200, '"pong"')
     })
-
-    it('replies json with pong in xml', () => {
-      return api()
-        .get('/api/ping')
-        .set('Accept', 'application/xml')
-        .expect('content-type', /xml/)
-        .expect(200, /pong/)
-    })
-  })
-
-  describe('when forcing the format in url', () => {
-    it('the response format is correct', () => {
-      return api()
-        .get('/api/ping')
-        .query({'format': 'xml'})
-        .expect('content-type', /xml/)
-        .expect(200, /pong/)
-    })
   })
 
   describe('When requesting a bad route', () => {
