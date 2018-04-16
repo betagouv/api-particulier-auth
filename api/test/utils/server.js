@@ -13,9 +13,9 @@ module.exports = function () {
 
   nock.enableNetConnect('localhost')
 
-  beforeEach((done) => {
+  beforeEach(() => {
     server = new Server(options)
-    server.start(done)
+    return server.start()
   })
   afterEach((done) => {
     server.stop(done)

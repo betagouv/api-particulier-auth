@@ -1,10 +1,10 @@
 const crypto = require('crypto')
-const Token = require('./token.model')
+const mongo = require('../lib/utils/mongo')
 
 class DbTokenService {
   constructor (options) {
     this.options = options
-    this.collection = Token
+    this.collection = mongo.db.collection('tokens')
   }
 
   initialize () {
@@ -13,7 +13,7 @@ class DbTokenService {
 
   getToken (token) {
     const encryptedToken = crypto.createHash('sha512').update(token).digest('hex')
-    return Token.findOne({hashed_token: encryptedToken})
+    return this.collection.findOne({hashed_token: encryptedToken})
   }
 }
 

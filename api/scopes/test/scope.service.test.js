@@ -1,13 +1,17 @@
 const expect = require('chai').expect
 const Service = require('../scope.service')
 const testData = require('./mongo.json')
+const mongo = require('../../lib/utils/mongo')
 
 describe('Scope service', () => {
-  const url = 'mongodb://localhost:27017/test-api-particulier'
-  const service = new Service({mongoDbUrl: url})
+  let service
+
   beforeEach(() => {
-    return service.initialize().then((service) => {
-      return service.collection.insertMany(testData.data)
+    return mongo.connect().then(() => {
+      service = new Service()
+      return service.initialize().then((service) => {
+        return service.collection.insertMany(testData.data.map((data) => Object.assign({}, data)))
+      })
     })
   })
 

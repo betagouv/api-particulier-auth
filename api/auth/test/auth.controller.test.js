@@ -3,6 +3,7 @@ const proxyrequire = require('proxyquire')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const chai = require('chai')
+const mongo = require('../../lib/utils/mongo')
 chai.use(sinonChai)
 chai.should()
 
@@ -32,7 +33,9 @@ describe('Auth controller', () => {
           }
         }
       })
-      service = new Auth({tokenService: 'db'})
+      return mongo.connect().then(() => {
+        service = new Auth({tokenService: 'db'})
+      })
     })
 
     it('should let pass with a bearer', () => {
@@ -94,7 +97,9 @@ describe('Auth controller', () => {
             }
           }
         })
-        service = new Auth({tokenService: 'db'})
+        return mongo.connect().then(() => {
+          service = new Auth({tokenService: 'db'})
+        })
       })
 
       it('should let pass 200 + consumer', () => {
@@ -126,7 +131,9 @@ describe('Auth controller', () => {
             }
           }
         })
-        service = new Auth({tokenService: 'db'})
+        return mongo.connect().then(() => {
+          service = new Auth({tokenService: 'db'})
+        })
       })
 
       it('should not let pass 401 + Error', () => {
