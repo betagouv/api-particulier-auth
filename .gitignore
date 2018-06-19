@@ -2,4 +2,5 @@
 /coverage
 *.swp
 *.swo
+isolate*
 
