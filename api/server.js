@@ -68,7 +68,7 @@ module.exports = class Server {
     routes.configure(app, options)
 
     app.use(function notFound (req, res, next) {
-      next(new StandardError('no route for URL ' + req.url, {code: 404}))
+      next(new StandardError(`no route for URL ${req.url}`, {code: 404}))
     })
 
     app.use(formatError)
