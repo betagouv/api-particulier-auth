@@ -44,7 +44,7 @@ module.exports = class Server {
 
     app.use(expressBunyanLogger({
       name: 'requests',
-      logger: logger,
+      logger,
       format: '":remote-address :incoming :method HTTP/:http-version :status-code :res-headers[content-length] :referer :user-agent[family] :user-agent[major].:user-agent[minor] :user-agent[os] :response-time ms";'
     }))
 
@@ -66,7 +66,7 @@ module.exports = class Server {
     routes.configure(app, options)
 
     app.use(function notFound (req, res, next) {
-      next(new StandardError('no route for URL ' + req.url, {code: 404}))
+      next(new StandardError(`no route for URL ${req.url}`, {code: 404}))
     })
 
     app.use(formatError)
