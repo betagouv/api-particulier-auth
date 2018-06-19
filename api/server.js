@@ -44,7 +44,7 @@ module.exports = class Server {
 
     app.use(expressBunyanLogger({
       name: 'requests',
-      logger: logger,
+      logger,
       // excludes: loggerProperties.excludes,
       // includesFn: loggerProperties.includesFn,
       format: '":remote-address :incoming :method HTTP/:http-version :status-code :res-headers[content-length] :referer :user-agent[family] :user-agent[major].:user-agent[minor] :user-agent[os] :response-time ms";'
