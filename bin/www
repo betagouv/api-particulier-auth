@@ -24,9 +24,7 @@ throng(NB_WORKERS, function (id) {
       activate: nconf.get('raven:activate'),
       dsn: nconf.get('raven:dsn')
     },
-    mongoDbUrl: nconf.get('mongoDbUrl'),
-    tokensPath: nconf.get('tokenPath'),
-    tokenService: nconf.get('tokenService')
+    mongoDbUrl: nconf.get('mongoDbUrl')
   })
 
   return server.start().catch((err) => {
