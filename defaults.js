@@ -11,8 +11,7 @@ module.exports = {
     activate: false,
     dsn: ''
   },
-  mongoDbUrl: 'mongodb://localhost:27017/api-particulier'
+  mongoDbUrl: 'mongodb://localhost:27017/api-particulier',
   tokensPath: './tokens',
-  tokenService: 'db',
   logginPath: '/tmp/pai-particulier-auth.log'
 }
