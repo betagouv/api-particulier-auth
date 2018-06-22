@@ -7,7 +7,6 @@ var router = express.Router()
 module.exports = function (options) {
   const controller = new Controller(options)
 
-  // router.get('/swagger.yaml', systemController.swagger)
   router.get('/ping', controller.ping)
   router.get('/ping', format)
   return router
