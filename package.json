@@ -8,7 +8,7 @@
     "url": "https://github.com/sgmap/api-particulier"
   },
   "scripts": {
-    "test": "mocha api/test/** api/*/test/** && npm run test-style",
+    "test": "NODE_ENV=test mocha api/test/** api/*/test/**",
     "test-style": "eslint --ignore-path .gitignore api/ auth/ bin/*",
     "start": "node --prof ./bin/www",
     "coverage": "nyc --reporter=text mocha api/test/** api/*/test/** && npm run test-style"

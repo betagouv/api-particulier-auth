@@ -1,4 +1,4 @@
-const serverTest = require('./../../test/utils/server')
+const serverTest = require('../../test/server')
 const proxyrequire = require('proxyquire')
 
 describe('System API', () => {

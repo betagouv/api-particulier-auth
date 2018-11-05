@@ -1,8 +1,9 @@
 const supertest = require('supertest')
 const nock = require('nock')
-const options = require('../../../defaults')
+const options = require('../../defaults')
 
-const Server = require('../../server')
+const {loadFixtures, cleanFixtures} = require('./fixtures');
+const Server = require('../server')
 
 module.exports = function () {
   let server
@@ -13,12 +14,15 @@ module.exports = function () {
 
   nock.enableNetConnect('localhost')
 
-  beforeEach(() => {
+  beforeEach(async () => {
     server = new Server(options)
-    return server.start()
+    await loadFixtures()
+
+    return await server.start()
   })
-  afterEach((done) => {
-    server.stop(done)
+  afterEach(async () => {
+    await cleanFixtures()
+    return new Promise((resolve => server.stop(resolve)))
   })
 
   const api = function () {
