@@ -1,19 +1,19 @@
 import { MongoClient } from 'mongodb';
 
-let connection = null;
+let mongodbConnection = null;
 
 const url = 'mongodb://localhost:27017';
 const dbName =
   process.env.NODE_ENV !== 'test' ? 'api-particulier' : 'api-particulier-test';
 
-export const getConnection = async () => {
-  if (connection && connection.isConnected()) {
-    return connection.db(dbName).collection('tokens');
+export const getDatabaseConnection = async () => {
+  if (mongodbConnection && mongodbConnection.isConnected()) {
+    return mongodbConnection.db(dbName);
   }
 
-  connection = await MongoClient.connect(url);
+  mongodbConnection = await MongoClient.connect(url);
 
   console.log(`Connected to database : ${url}/${dbName}`);
 
-  return connection.db(dbName).collection('tokens');
+  return mongodbConnection.db(dbName);
 };
