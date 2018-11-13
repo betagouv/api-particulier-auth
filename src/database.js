@@ -4,7 +4,7 @@ let mongodbConnection = null;
 
 const url = 'mongodb://localhost:27017';
 const dbName =
-  process.env.NODE_ENV !== 'test' ? 'api-particulier' : 'api-particulier-test';
+  process.env.NODE_ENV === 'test' ? 'api-particulier-test' : 'api-particulier';
 
 export const getDatabaseConnection = async () => {
   if (mongodbConnection && mongodbConnection.isConnected()) {
