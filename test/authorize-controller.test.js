@@ -29,15 +29,11 @@ describe('GET /api/auth/authorize', function() {
     return request(server)
       .get('/api/auth/authorize')
       .set('x-api-key', testToken)
-      .expect(200)
-      .expect(({ body: { _id, name, scopes } }) => {
-        if (
-          _id !== '5bcf377663623910ae9a05ca' ||
-          name !== tokenFixtures[0].name ||
-          scopes[0] !== tokenFixtures[0].scopes[0]
-        ) {
-          throw new Error('wrong token returned');
-        }
+      .expect(200, {
+        _id: '5bcf377663623910ae9a05ca',
+        name:
+          'Mairie de test - https://signup-staging.api.gouv.fr/api-particulier/1',
+        scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
       });
   });
 });
