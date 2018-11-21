@@ -3,7 +3,7 @@ import sinon from 'sinon';
 
 import server from '../src/app';
 import { cleanFixtures, loadFixtures, testToken } from './fixtures';
-import * as apiScopes from '../src/api-scopes';
+import * as apiScopes from '../src/providers/api-scopes';
 
 const sandbox = sinon.sandbox.create();
 

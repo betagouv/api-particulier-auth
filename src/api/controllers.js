@@ -1,8 +1,8 @@
-import crypto from 'crypto';
 import { isEmpty, isString } from 'lodash';
 
-import { getDatabaseConnection } from './database';
-import { getScopes } from './api-scopes';
+import { getDatabaseConnection } from '../providers/database';
+import { getScopes } from '../providers/api-scopes';
+import { hashApiKey } from '../utils/api-key';
 
 export const pingController = (req, res, next) => res.json('pong');
 
@@ -16,10 +16,7 @@ export const authorizeController = async (req, res, next) => {
 
     const databaseConnection = await getDatabaseConnection();
 
-    const hashedApiKey = crypto
-      .createHash('sha512')
-      .update(apiKey)
-      .digest('hex');
+    const hashedApiKey = hashApiKey(apiKey);
 
     const token = await databaseConnection.collection('tokens').findOne(
       {
