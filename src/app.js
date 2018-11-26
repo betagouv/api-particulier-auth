@@ -5,7 +5,9 @@ import morgan from 'morgan';
 import expressHandlebars from 'express-handlebars';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-
+import oauthAuthenticate from './utils/oauth-admin-authenticate';
+import apiKeyAuthenticate from './utils/api-key-admin-authenticate';
+import authorize from './utils/admin-authorize';
 import { authorizeController, pingController } from './api/controllers';
 import {
   createToken,
@@ -50,11 +52,35 @@ apiRouter.use(function(err, req, res, next) {
   res.sendStatus(401);
 });
 
+// Admin api router
+const adminApiRouter = express.Router();
+app.use('/admin/api', adminApiRouter);
+
+adminApiRouter.use(apiKeyAuthenticate(process.env.HASHED_SIGNUP_API_KEY));
+
+adminApiRouter.post('/token/', bodyParser.json(), createToken);
+
+adminApiRouter.use(function(err, req, res, next) {
+  console.log(err);
+  res.sendStatus(500);
+});
+
 // Admin router
 const adminRouter = express.Router();
 app.use('/admin', adminRouter);
 
-// TODO add oauth2 authentication here
+adminRouter.use(
+  oauthAuthenticate({
+    oauthHost: process.env.OAUTH_HOST,
+    oauthUserInfoURL: `${process.env.OAUTH_HOST}/api/v1/me`,
+    clientID: process.env.OAUTH_CLIENT_ID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    host: `https://${process.env.API_PARTICULIER_SERVER_NAME}`,
+    mountPointPath: '/admin',
+    sessionSecret: process.env.SESSION_SECRET,
+  })
+);
+adminRouter.use(authorize());
 adminRouter.use(helmet());
 
 adminRouter.get('/', getTokenList);
@@ -64,14 +90,6 @@ adminRouter.post(
   '/token/:id',
   bodyParser.urlencoded({ extended: false }),
   updateToken
-);
-
-// TODO add /api somehow for this endpoint
-adminRouter.post(
-  '/token/',
-  bodyParser.json(),
-  // TODO add token authentication here
-  createToken
 );
 
 adminRouter.use(function(err, req, res, next) {
