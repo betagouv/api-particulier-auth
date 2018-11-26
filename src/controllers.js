@@ -20,9 +20,12 @@ export const authorizeController = async (req, res, next) => {
       .update(apiKey)
       .digest('hex');
 
-    const token = await databaseConnection.collection('tokens').findOne({
-      hashed_token: hashedApiKey,
-    });
+    const token = await databaseConnection.collection('tokens').findOne(
+      {
+        hashed_token: hashedApiKey,
+      },
+      { projection: { _id: 1, name: 1, scopes: 1 } }
+    );
 
     if (isEmpty(token)) {
       throw new Error('token not found');

@@ -5,3 +5,5 @@
 *.orig
 isolate*
 
+.idea
+api-particulier-auth.log
