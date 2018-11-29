@@ -94,6 +94,7 @@ export const createToken = async (req, res, next) => {
         name: sanitize(req.body.name),
         email: sanitize(req.body.email),
         signup_id: sanitize(req.body.signup_id),
+        created_at: new Date().toISOString(),
       });
 
     const newToken = insertResult.ops[0];
@@ -126,7 +127,12 @@ export const generateNewApiKey = async (req, res, next) => {
       .collection('tokens')
       .findOneAndUpdate(
         { _id: ObjectID(req.params.id) },
-        { $set: { hashed_token: hashedApiKey } },
+        {
+          $set: {
+            hashed_token: hashedApiKey,
+            api_key_issued_at: new Date().toISOString(),
+          },
+        },
         { returnOriginal: false }
       );
 
