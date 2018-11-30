@@ -40,7 +40,44 @@ describe('GET /api/auth/authorize', function() {
         _id: '5bcf377663623910ae9a05ca',
         name:
           'Mairie de test - https://signup-staging.api.gouv.fr/api-particulier/1',
+        email: 'test@test',
         scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
       });
+  });
+});
+
+describe('GET /api/introspect', function() {
+  beforeEach(async () => {
+    sandbox
+      .stub(apiScopes, 'getScopes')
+      .resolves({ scopes: ['dgfip_avis_imposition', 'dgfip_adresse'] });
+    await loadFixtures();
+  });
+  afterEach(async () => {
+    sandbox.restore();
+    await cleanFixtures();
+  });
+
+  // DEPRECATED: the apiKey is to be read from headers only
+  it('should 200 with the FS name and scopes', () => {
+    return request(server)
+      .get(`/api/auth/authorize?token=${testToken}`)
+      .expect('content-type', /json/)
+      .expect(200, {
+        _id: '5bcf377663623910ae9a05ca',
+        name:
+          'Mairie de test - https://signup-staging.api.gouv.fr/api-particulier/1',
+        email: 'test@test',
+        scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
+      });
+  });
+
+  it('should return a xml with pong when asking for xml', () => {
+    return request(server)
+      .get('/api/auth/authorize')
+      .set('x-api-key', testToken)
+      .set('Accept', 'application/xml')
+      .expect('content-type', /xml/)
+      .expect(200, /result/);
   });
 });

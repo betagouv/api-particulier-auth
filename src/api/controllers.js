@@ -1,4 +1,5 @@
 import { isEmpty, isString } from 'lodash';
+import * as js2xmlparser from 'js2xmlparser';
 
 import { getDatabaseConnection } from '../providers/database';
 import { getScopes } from '../providers/api-scopes';
@@ -8,7 +9,12 @@ export const pingController = (req, res, next) => res.json('pong');
 
 export const authorizeController = async (req, res, next) => {
   try {
-    const apiKey = req.get('X-API-Key');
+    let apiKey = req.get('X-API-Key');
+
+    // DEPRECATED: the apiKey is to be read from headers only
+    if (req.query.token && !isString(apiKey)) {
+      apiKey = req.query.token;
+    }
 
     if (!isString(apiKey)) {
       throw new Error('API key not found');
@@ -22,7 +28,7 @@ export const authorizeController = async (req, res, next) => {
       {
         hashed_token: hashedApiKey,
       },
-      { projection: { _id: 1, name: 1 } }
+      { projection: { _id: 1, name: 1, email: 1 } }
     );
 
     if (isEmpty(token)) {
@@ -35,10 +41,28 @@ export const authorizeController = async (req, res, next) => {
       throw new Error('scopes not found');
     }
 
-    return res.json({
-      _id: token._id,
+    const data = {
+      _id: token._id.toString(),
       name: token.name,
+      email: token.email,
       scopes: scopes.scopes,
+    };
+
+    return res.format({
+      'application/json': function() {
+        res.json(data);
+      },
+      'application/xml': function() {
+        res.send(
+          js2xmlparser.parse(
+            'result',
+            typeof data === 'string' ? { data } : data
+          )
+        );
+      },
+      default: function() {
+        res.json(data);
+      },
     });
   } catch (error) {
     next(error);
