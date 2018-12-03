@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { isEmpty, isString } from 'lodash';
 
 import { getDatabaseConnection } from './database';
+import { getScopes } from './api-scopes';
 
 export const pingController = (req, res, next) => res.json('pong');
 
@@ -24,14 +25,24 @@ export const authorizeController = async (req, res, next) => {
       {
         hashed_token: hashedApiKey,
       },
-      { projection: { _id: 1, name: 1, scopes: 1 } }
+      { projection: { _id: 1, name: 1 } }
     );
 
     if (isEmpty(token)) {
       throw new Error('token not found');
     }
 
-    return res.json(token);
+    const scopes = await getScopes(token._id.toString());
+
+    if (isEmpty(scopes)) {
+      throw new Error('scopes not found');
+    }
+
+    return res.json({
+      _id: token._id,
+      name: token.name,
+      scopes: scopes.scopes,
+    });
   } catch (error) {
     next(error);
   }

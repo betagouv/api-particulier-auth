@@ -1,16 +1,23 @@
 import request from 'supertest';
+import sinon from 'sinon';
 
 import server from '../src/app';
-import {
-  cleanFixtures,
-  loadFixtures,
-  testToken,
-  tokenFixtures,
-} from './fixtures';
+import { cleanFixtures, loadFixtures, testToken } from './fixtures';
+import * as apiScopes from '../src/api-scopes';
+
+const sandbox = sinon.sandbox.create();
 
 describe('GET /api/auth/authorize', function() {
-  beforeEach(loadFixtures);
-  afterEach(cleanFixtures);
+  beforeEach(async () => {
+    sandbox
+      .stub(apiScopes, 'getScopes')
+      .resolves({ scopes: ['dgfip_avis_imposition', 'dgfip_adresse'] });
+    await loadFixtures();
+  });
+  afterEach(async () => {
+    sandbox.restore();
+    await cleanFixtures();
+  });
 
   it('should return 401 when no credentials are provided', () => {
     return request(server)
