@@ -14,22 +14,6 @@ describe('GET /api/ping', () => {
       .expect(200, '"pong"');
   });
 
-  it('should return a json with pong even when asking for xml', () => {
-    return request(server)
-      .get('/api/ping')
-      .set('Accept', 'application/xml')
-      .expect('content-type', /json/)
-      .expect(200, /pong/);
-  });
-
-  it('should return a json with pong even when forcing for xml', () => {
-    return request(server)
-      .get('/api/ping')
-      .query({ format: 'xml' })
-      .expect('content-type', /json/)
-      .expect(200, /pong/);
-  });
-
   it('should return a 404 when asking for an undefined route', function() {
     return request(server)
       .get('/api/not-existing')
