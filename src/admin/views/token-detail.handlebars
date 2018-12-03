@@ -18,11 +18,11 @@
         <input type="submit" value="Save">
     </form>
 
-    <h3>Generate new token</h3>
+    <h3>Generate new API Key</h3>
     {{#if token.hashed_token}}
-        <p>You already have a token!</p>
+        <p>You already have an API Key!</p>
     {{ else }}
-        You do not have a token yet. Please click on the button below:
+        You do not have an API Key yet. Please click on the button below:
         <form action="/admin/token/{{token._id}}/generate-new-api-key" method="post">
             <input
                     xx
@@ -31,15 +31,15 @@
                     background: #992e2f;
                     color: #fff;"
                     type="submit"
-                    value="Generate new token"
+                    value="Generate new API Key"
             >
         </form>
     {{/if}}
-    {{#if newlyGeneratedToken}}
+    {{#if newlyGeneratedApiKey}}
         <p>
-            Your new token is:
+            Your new API Key is:
         </p>
-        <pre><code>{{newlyGeneratedToken}}</code></pre>
+        <pre><code>{{newlyGeneratedApiKey}}</code></pre>
         <p>
             Write it down now as it will never be shown again
         </p>

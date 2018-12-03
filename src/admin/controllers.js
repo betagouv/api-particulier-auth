@@ -139,7 +139,7 @@ export const generateNewApiKey = async (req, res, next) => {
     return res.render('token-detail', {
       token: newToken,
       tokenToString: JSON.stringify(newToken, null, 2),
-      newlyGeneratedToken: newApiKey,
+      newlyGeneratedApiKey: newApiKey,
       signupHost,
     });
   } catch (e) {
