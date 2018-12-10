@@ -30,12 +30,6 @@ const authenticate = function({
 
   const oauth2Client = oauth2.create(credentials);
 
-  const authorizationUri = oauth2Client.authorizationCode.authorizeURL({
-    redirect_uri: `${host}${mountPointPath}${oauthCallbackPath}`,
-    scope: [],
-    state: 'home',
-  });
-
   // Creating a router to add authentication callback on it
   const authRouter = express.Router();
 
@@ -54,11 +48,16 @@ const authenticate = function({
     })
   );
 
-  // con
   authRouter.use((req, res, next) => {
     if (req.path === oauthCallbackPath) {
       return next();
     }
+
+    const authorizationUri = oauth2Client.authorizationCode.authorizeURL({
+      redirect_uri: `${host}${mountPointPath}${oauthCallbackPath}`,
+      scope: [],
+      state: `${req.originalUrl || '/admin/'}`,
+    });
 
     if (isEmpty(req.session)) {
       return res.redirect(authorizationUri);
@@ -69,6 +68,8 @@ const authenticate = function({
 
   authRouter.get(oauthCallbackPath, async (req, res, next) => {
     try {
+      const originalUrl = req.query.state;
+
       const tokenConfig = {
         code: req.query.code,
         redirect_uri: `${host}${mountPointPath}${oauthCallbackPath}`,
@@ -85,7 +86,7 @@ const authenticate = function({
 
       req.session = userInfo;
 
-      res.redirect('/admin/');
+      res.redirect(originalUrl);
     } catch (error) {
       console.error(error);
       res.sendStatus(401);
