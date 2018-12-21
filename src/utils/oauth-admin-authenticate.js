@@ -53,13 +53,13 @@ const authenticate = function({
       return next();
     }
 
-    const authorizationUri = oauth2Client.authorizationCode.authorizeURL({
-      redirect_uri: `${host}${mountPointPath}${oauthCallbackPath}`,
-      scope: [],
-      state: `${req.originalUrl || '/admin/'}`,
-    });
-
     if (isEmpty(req.session)) {
+      const authorizationUri = oauth2Client.authorizationCode.authorizeURL({
+        redirect_uri: `${host}${mountPointPath}${oauthCallbackPath}`,
+        scope: 'openid email roles',
+        state: `${req.originalUrl || '/admin/'}`,
+      });
+
       return res.redirect(authorizationUri);
     }
 
@@ -68,6 +68,10 @@ const authenticate = function({
 
   authRouter.get(oauthCallbackPath, async (req, res, next) => {
     try {
+      if (req.query.error) {
+        throw new Error(`Oauth server says: ${req.query.error}, ${req.query.error_description}`)
+      }
+
       const originalUrl = req.query.state;
 
       const tokenConfig = {
