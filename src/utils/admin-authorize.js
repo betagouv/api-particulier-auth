@@ -1,6 +1,8 @@
+import { isArray } from 'lodash';
+
 const authorize = function () {
   return (req, res, next) => {
-    if (!req.session.roles.includes('api-particulier-token-admin')) {
+    if (!isArray(req.session.roles) || !req.session.roles.includes('api-particulier-token-admin')) {
       return res.sendStatus(403);
     }
 
