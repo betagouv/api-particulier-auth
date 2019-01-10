@@ -63,6 +63,7 @@ export const updateToken = async (req, res, next) => {
         { _id: ObjectID(req.params.id) },
         {
           $set: {
+            name: sanitize(req.body.name),
             email: sanitize(req.body.email),
             signup_id: sanitize(req.body.signup_id),
           },
