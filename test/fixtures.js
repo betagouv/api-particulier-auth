@@ -6,11 +6,11 @@ export const testToken = '59eb9fddb23a05e8c82f922caf6c1733';
 export const tokenFixtures = [
   {
     _id: '5bcf377663623910ae9a05ca',
-    hashed: true,
-    name:
-      'Mairie de test - https://signup-staging.api.gouv.fr/api-particulier/1',
+    name: 'COMMUNE DE TEST - 1',
     email: 'test@test',
-    scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
+    signup_id: '1',
+    created_at: '2018-12-18T12:48:54.455Z',
+    api_key_issued_at: '2018-12-18T12:49:13.948Z',
     hashed_token: crypto
       .createHash('sha512')
       .update(testToken)

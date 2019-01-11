@@ -38,8 +38,7 @@ describe('GET /api/auth/authorize', function() {
       .set('x-api-key', testToken)
       .expect(200, {
         _id: '5bcf377663623910ae9a05ca',
-        name:
-          'Mairie de test - https://signup-staging.api.gouv.fr/api-particulier/1',
+        name: 'COMMUNE DE TEST - 1',
         email: 'test@test',
         scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
       });
@@ -65,8 +64,7 @@ describe('GET /api/introspect', function() {
       .expect('content-type', /json/)
       .expect(200, {
         _id: '5bcf377663623910ae9a05ca',
-        name:
-          'Mairie de test - https://signup-staging.api.gouv.fr/api-particulier/1',
+        name: 'COMMUNE DE TEST - 1',
         email: 'test@test',
         scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
       });

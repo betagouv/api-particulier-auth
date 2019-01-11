@@ -34,11 +34,11 @@ const getApiScopesConnection = async () => {
   return mongodbConnection.db(dbName);
 };
 
-export const getScopes = async clientId => {
+export const getScopes = async signupId => {
   const apiScopesConnection = await getApiScopesConnection();
 
   return await apiScopesConnection.collection('scopes').findOne({
-    client_id: clientId,
+    signup_id: signupId,
     provider: 'api-particulier',
   });
 };

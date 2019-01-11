@@ -31,7 +31,7 @@ export const getTokenDetail = async (req, res, next) => {
       .collection('tokens')
       .findOne({ _id: ObjectID(req.params.id) });
 
-    const { scopes } = await getScopes(req.params.id);
+    const { scopes } = await getScopes(token.signup_id);
 
     return res.render('token-detail', {
       token: {
