@@ -28,14 +28,14 @@ export const authorizeController = async (req, res, next) => {
       {
         hashed_token: hashedApiKey,
       },
-      { projection: { _id: 1, name: 1, email: 1 } }
+      { projection: { _id: 1, name: 1, email: 1, signup_id: 1 } }
     );
 
     if (isEmpty(token)) {
       throw new Error('token not found');
     }
 
-    const scopes = await getScopes(token._id.toString());
+    const scopes = await getScopes(token.signup_id);
 
     if (isEmpty(scopes)) {
       throw new Error('scopes not found');
