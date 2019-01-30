@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "prettier --write */*.js",
     "start": "node .",
-    "test": "NODE_ENV=test mocha --require babel-polyfill --require babel-register --exit; prettier */*.js --list-different"
+    "test": "NODE_ENV=test OAUTH_HOST=https://test SESSION_SECRET=test mocha --require babel-polyfill --require babel-register --exit && prettier */*.js --list-different && npm audit"
   },
   "repository": {
     "type": "git",
