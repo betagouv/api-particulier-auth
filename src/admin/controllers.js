@@ -15,6 +15,7 @@ export const getTokenList = async (req, res, next) => {
     const tokenList = await databaseConnection
       .collection('tokens')
       .find()
+      .sort({created_at: -1})
       .toArray();
 
     return res.render('token-list', { tokenList });
