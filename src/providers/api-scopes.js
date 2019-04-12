@@ -39,6 +39,6 @@ export const getScopes = async signupId => {
 
   return await apiScopesConnection.collection('scopes').findOne({
     signup_id: signupId,
-    provider: 'api-particulier',
+    provider: 'api_particulier',
   });
 };
