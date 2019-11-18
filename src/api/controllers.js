@@ -2,7 +2,6 @@ import { isEmpty, isString } from 'lodash';
 import * as js2xmlparser from 'js2xmlparser';
 
 import { getDatabaseConnection } from '../providers/database';
-import { getScopes } from '../providers/api-scopes';
 import { hashApiKey } from '../utils/api-key';
 
 export const pingController = (req, res, next) => res.json('pong');
@@ -28,24 +27,18 @@ export const authorizeController = async (req, res, next) => {
       {
         hashed_token: hashedApiKey,
       },
-      { projection: { _id: 1, name: 1, email: 1, signup_id: 1 } }
+      { projection: { _id: 1, name: 1, email: 1, signup_id: 1, scopes: 1 } }
     );
 
     if (isEmpty(token)) {
       throw new Error('token not found');
     }
 
-    const scopes = await getScopes(token.signup_id);
-
-    if (isEmpty(scopes)) {
-      throw new Error('scopes not found');
-    }
-
     const data = {
       _id: token._id.toString(),
       name: token.name,
       email: token.email,
-      scopes: scopes.scopes,
+      scopes: token.scopes,
     };
 
     return res.format({

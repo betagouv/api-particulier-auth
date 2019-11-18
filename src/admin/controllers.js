@@ -2,7 +2,6 @@ import sanitize from 'mongo-sanitize';
 import { ObjectID } from 'mongodb';
 
 import { getDatabaseConnection } from '../providers/database';
-import { getScopes } from '../providers/api-scopes';
 import { getNewApiKey, hashApiKey } from '../utils/api-key';
 
 const signupHost =
@@ -15,7 +14,7 @@ export const getTokenList = async (req, res, next) => {
     const tokenList = await databaseConnection
       .collection('tokens')
       .find()
-      .sort({created_at: -1})
+      .sort({ created_at: -1 })
       .toArray();
 
     return res.render('token-list', { tokenList });
@@ -32,21 +31,9 @@ export const getTokenDetail = async (req, res, next) => {
       .collection('tokens')
       .findOne({ _id: ObjectID(req.params.id) });
 
-    const { scopes } = await getScopes(token.signup_id);
-
     return res.render('token-detail', {
-      token: {
-        ...token,
-        scopes,
-      },
-      tokenToString: JSON.stringify(
-        {
-          ...token,
-          scopes,
-        },
-        null,
-        2
-      ),
+      token,
+      tokenToString: JSON.stringify({ token }, null, 2),
       signupHost,
     });
   } catch (e) {
@@ -69,7 +56,7 @@ export const updateToken = async (req, res, next) => {
             signup_id: sanitize(req.body.signup_id),
           },
         },
-        { returnOriginal: false }
+        { returnOriginal: false },
       );
 
     return res.render('token-detail', {
@@ -95,6 +82,7 @@ export const createToken = async (req, res, next) => {
       .insertOne({
         name: sanitize(req.body.name),
         email: sanitize(req.body.email),
+        scopes: sanitize(req.body.scopes),
         signup_id: sanitize(req.body.signup_id),
         created_at: new Date().toISOString(),
       });
@@ -117,7 +105,7 @@ export const generateNewApiKey = async (req, res, next) => {
 
     if (token.hashed_token) {
       return next(
-        new Error('You cannot generate a new token if you already have one')
+        new Error('You cannot generate a new token if you already have one'),
       );
     }
 
@@ -135,7 +123,7 @@ export const generateNewApiKey = async (req, res, next) => {
             api_key_issued_at: new Date().toISOString(),
           },
         },
-        { returnOriginal: false }
+        { returnOriginal: false },
       );
 
     return res.render('token-detail', {
