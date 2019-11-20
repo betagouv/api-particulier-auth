@@ -11,6 +11,7 @@ export const tokenFixtures = [
     signup_id: '1',
     created_at: '2018-12-18T12:48:54.455Z',
     api_key_issued_at: '2018-12-18T12:49:13.948Z',
+    scopes: ['dgfip_avis_imposition', 'dgfip_adresse'],
     hashed_token: crypto
       .createHash('sha512')
       .update(testToken)

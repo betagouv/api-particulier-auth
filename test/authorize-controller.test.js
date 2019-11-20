@@ -3,19 +3,14 @@ import sinon from 'sinon';
 
 import server from '../src/app';
 import { cleanFixtures, loadFixtures, testToken } from './fixtures';
-import * as apiScopes from '../src/providers/api-scopes';
 
 const sandbox = sinon.sandbox.create();
 
 describe('GET /api/auth/authorize', function() {
   beforeEach(async () => {
-    sandbox
-      .stub(apiScopes, 'getScopes')
-      .resolves({ scopes: ['dgfip_avis_imposition', 'dgfip_adresse'] });
     await loadFixtures();
   });
   afterEach(async () => {
-    sandbox.restore();
     await cleanFixtures();
   });
 
@@ -47,13 +42,9 @@ describe('GET /api/auth/authorize', function() {
 
 describe('GET /api/introspect', function() {
   beforeEach(async () => {
-    sandbox
-      .stub(apiScopes, 'getScopes')
-      .resolves({ scopes: ['dgfip_avis_imposition', 'dgfip_adresse'] });
     await loadFixtures();
   });
   afterEach(async () => {
-    sandbox.restore();
     await cleanFixtures();
   });
 
