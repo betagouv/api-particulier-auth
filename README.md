@@ -27,4 +27,4 @@ npm test
 
 API Particulier auth is part of the API Particulier ecosystem.
 
-The instructions to install the whole API Particulier ecosystem is available on a [private gitlab](https://gitlab.incubateur.net/beta.gouv.fr/api-particulier-ansible).
+The instructions to install the whole API Particulier ecosystem is available on a [private gitlab](https://gitlab.com/etalab/api.gouv.fr/api-particulier-ansible).
